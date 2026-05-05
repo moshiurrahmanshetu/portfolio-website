@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import About from "@/components/About";
+import Experience from "@/components/Experience";
 import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
 import Contact from "@/components/Contact";
@@ -88,7 +89,7 @@ export default function Home() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3, duration: 0.5 }}
               >
-                [Your Name]
+                Alex Reed
               </motion.span>
             </motion.h1>
 
@@ -249,6 +250,7 @@ export default function Home() {
     </section>
 
     <About />
+    <Experience />
     <Skills />
     <Projects />
     <Contact />
