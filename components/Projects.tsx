@@ -14,7 +14,7 @@ const projects = [
     title: "E-Commerce Platform",
     description:
       "Full-featured online store with payment integration, admin dashboard, and real-time inventory management.",
-    image: "/projects/ecommerce.jpg",
+    image: "/img/ecommerce.jpg",
     tech: ["Laravel", "React", "MySQL", "Stripe"],
     category: "Laravel",
     liveUrl: "#",
@@ -25,7 +25,7 @@ const projects = [
     title: "Task Management App",
     description:
       "Collaborative project management tool with real-time updates, drag-and-drop interface, and team analytics.",
-    image: "/projects/taskapp.jpg",
+    image: "/img/task-management.jpg",
     tech: ["React", "Next.js", "TypeScript", "Prisma"],
     category: "React",
     liveUrl: "#",
@@ -36,7 +36,7 @@ const projects = [
     title: "Blog CMS",
     description:
       "Content management system with markdown editor, SEO optimization, and multi-user support.",
-    image: "/projects/blog.jpg",
+    image: "/img/blog-site.jpg",
     tech: ["Laravel", "Vue.js", "MySQL", "Tailwind"],
     category: "Laravel",
     liveUrl: "#",
@@ -47,7 +47,7 @@ const projects = [
     title: "Portfolio Dashboard",
     description:
       "Analytics dashboard for tracking portfolio performance with charts and real-time data visualization.",
-    image: "/projects/dashboard.jpg",
+    image: "/img/portfolio_dashboard.jpg",
     tech: ["Next.js", "React", "D3.js", "API"],
     category: "React",
     liveUrl: "#",
@@ -58,7 +58,7 @@ const projects = [
     title: "API Gateway Service",
     description:
       "RESTful API service with authentication, rate limiting, and comprehensive documentation.",
-    image: "/projects/api.jpg",
+    image: "/img/api_connection.jpg",
     tech: ["Laravel", "PHP", "Redis", "Docker"],
     category: "Laravel",
     liveUrl: "#",
@@ -69,7 +69,7 @@ const projects = [
     title: "Social Media App",
     description:
       "Modern social platform with feeds, messaging, notifications, and responsive design.",
-    image: "/projects/social.jpg",
+    image: "/img/social_media_app.jpg",
     tech: ["React", "Next.js", "Socket.io", "MongoDB"],
     category: "React",
     liveUrl: "#",

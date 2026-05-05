@@ -67,10 +67,13 @@ export default function Home() {
           >
             {/* Greeting */}
             <motion.div variants={textVariants} className="mb-4">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted text-sm font-medium text-muted-foreground">
-                <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
+              <span className="relative inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted text-sm font-medium text-muted-foreground">
+                <span className="absolute inline-flex h-3 w-3 rounded-full bg-secondary opacity-75"></span>
+                  <span className="animate-ping relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
                 Available for work
               </span>
+             
+              
             </motion.div>
 
             {/* Name */}
@@ -172,10 +175,13 @@ export default function Home() {
                 {/* Placeholder for Profile Image */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
-                    <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-muted border-4 border-primary/30 flex items-center justify-center">
-                      <span className="text-4xl">👨‍💻</span>
+                    <div className="w-50 h-50 mx-auto mb-4 rounded-full bg-muted border-4 border-primary/30 flex items-center justify-center">
+                      <span className="text-4xl rounded-full overflow-hidden"><img
+                    src="/img/img_moshiur-300.jpg"
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  /></span>
                     </div>
-                    <p className="text-muted-foreground text-sm">Profile Image</p>
                   </div>
                 </div>
 
