@@ -144,7 +144,7 @@ export default function CreativeHero() {
                 <div className="h-full flex flex-col items-center justify-center text-center">
                   {/* Avatar Circle */}
                   <motion.div
-                    animate={{ rotate: 360 }}
+                    // animate={{ rotate: 360 }}
                     transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                     className="relative w-32 h-32 mb-6"
                   >

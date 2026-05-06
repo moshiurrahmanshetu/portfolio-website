@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Clock, Calendar, User, Tag } from "lucide-react";
 import { getPostBySlug, getAllPostSlugs, formatDate } from "@/lib/server/blog";
+import { MDXRemote } from "next-mdx-remote/rsc";
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -15,8 +16,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
-  // Dynamically import and render MDX content
-  const { default: MDXContent } = await import(`@/content/blog/${slug}.mdx`);
 
   return (
     <div className="min-h-screen">
@@ -41,7 +40,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium rounded-full bg-primary/10 text-primary"
+                  className="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium rounded-full"
+                  style={{
+                    backgroundColor: `hsl(var(--primary) / 0.1)`,
+                    color: `hsl(var(--primary))`
+                  }}
                 >
                   <Tag size={12} />
                   {tag}
@@ -77,7 +80,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <section className="py-8 pb-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="prose prose-invert prose-lg max-w-none">
-            <MDXContent />
+            <MDXRemote source={post.content} />
           </div>
         </div>
       </section>

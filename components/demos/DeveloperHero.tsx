@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Terminal, Code2, Braces, Database } from "lucide-react";
 import Link from "next/link";
@@ -12,6 +13,99 @@ const codeLines = [
   { line: 5, content: "available: true,", indent: 1 },
   { line: 6, content: "};", indent: 0 },
 ];
+
+const typingVariants = [
+  "role: Full Stack Developer;",
+  "available: true;",
+  'status: "building cool things";',
+  'status: "open to work";',
+];
+
+function TypingAnimation() {
+  const [displayText, setDisplayText] = useState("");
+  const [variantIndex, setVariantIndex] = useState(0);
+  const [isTyping, setIsTyping] = useState(true);
+  const [cursorVisible, setCursorVisible] = useState(true);
+
+  const currentText = typingVariants[variantIndex];
+
+  // Cursor blink when idle
+  useEffect(() => {
+    if (isTyping) {
+      setCursorVisible(true);
+      return;
+    }
+
+    const blinkInterval = setInterval(() => {
+      setCursorVisible((v) => !v);
+    }, 530);
+
+    return () => clearInterval(blinkInterval);
+  }, [isTyping]);
+
+  // Typing animation
+  useEffect(() => {
+    if (!isTyping) return;
+
+    const targetText = currentText;
+
+    if (displayText.length < targetText.length) {
+      // Typing phase
+      const timeout = setTimeout(() => {
+        setDisplayText(targetText.slice(0, displayText.length + 1));
+      }, 80 + Math.random() * 60); // Natural typing speed variation
+
+      return () => clearTimeout(timeout);
+    } else {
+      // Finished typing, wait then start deleting
+      const timeout = setTimeout(() => {
+        setIsTyping(false);
+      }, 1500);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [displayText, currentText, isTyping]);
+
+  // Deleting animation
+  useEffect(() => {
+    if (isTyping || displayText.length === 0) return;
+
+    const timeout = setTimeout(() => {
+      setDisplayText((prev) => prev.slice(0, -1));
+    }, 40); // Faster delete speed
+
+    return () => clearTimeout(timeout);
+  }, [displayText, isTyping]);
+
+  // Switch to next variant after deleting
+  useEffect(() => {
+    if (!isTyping && displayText.length === 0) {
+      const timeout = setTimeout(() => {
+        setVariantIndex((prev) => (prev + 1) % typingVariants.length);
+        setIsTyping(true);
+      }, 400);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [displayText, isTyping]);
+
+  return (
+    <div className="flex">
+      <span className="w-8 text-slate-600 select-none text-right mr-4">7</span>
+      <span className="text-emerald-400" style={{ marginLeft: "20px" }}>
+        {displayText}
+        <span
+          className="inline-block w-2 h-5 ml-0.5 align-middle"
+          style={{
+            backgroundColor: "#f59e0b",
+            opacity: cursorVisible ? 1 : 0,
+            transition: "opacity 0.1s ease",
+          }}
+        />
+      </span>
+    </div>
+  );
+}
 
 export default function DeveloperHero() {
   return (
@@ -144,16 +238,10 @@ export default function DeveloperHero() {
                   </motion.div>
                 ))}
                 
-                {/* Cursor */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0, 1, 0] }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                  className="flex mt-2"
-                >
-                  <span className="w-8 text-slate-600 select-none text-right mr-4">7</span>
-                  <span className="w-2 h-5 bg-amber-500" />
-                </motion.div>
+                {/* Typing Animation */}
+                <div className="mt-2">
+                  <TypingAnimation />
+                </div>
               </div>
             </div>
 
