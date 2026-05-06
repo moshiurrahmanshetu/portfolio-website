@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Geist, Manrope } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -8,6 +8,11 @@ import PageTransition from "@/components/PageTransition";
 import ScrollProgress from "@/components/ScrollProgress";
 import BackToTop from "@/components/BackToTop";
 import CustomCursor from "@/components/CustomCursor";
+import { ThemeProvider as CustomThemeProvider } from "@/components/ThemeContext";
+import ThemeCustomizer from "@/components/ThemeCustomizer";
+import { DemoProvider } from "@/components/DemoContext";
+import DemoSwitcher from "@/components/DemoSwitcher";
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -15,7 +20,24 @@ const inter = Inter({
   display: "swap",
 });
 
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist",
+  display: "swap",
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NODE_ENV === "production"
+      ? "https://yourdomain.com"
+      : "http://localhost:3000"
+  ),
   title: {
     default: "Portfolio | Full Stack Developer (Laravel + Next.js)",
     template: "%s | Portfolio",
@@ -88,18 +110,27 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body
+        className={`${inter.variable} ${geist.variable} ${manrope.variable} antialiased`}
+      >
         <ThemeProvider>
-          <PageTransition>
-            <div className="flex min-h-screen flex-col bg-background text-foreground">
-              <ScrollProgress />
-              <CustomCursor />
-              <Navbar />
-              <main className="flex-1 pt-16">{children}</main>
-              <Footer />
-              <BackToTop />
-            </div>
-          </PageTransition>
+          <CustomThemeProvider>
+            <DemoProvider>
+              <PageTransition>
+                <div className="flex min-h-screen flex-col bg-background text-foreground">
+                  <ScrollProgress />
+                  <CustomCursor />
+                  <Navbar />
+                  <main className="flex-1">{children}</main>
+                  <Footer />
+                  <BackToTop />
+                  <ThemeCustomizer />
+                  <DemoSwitcher />
+                  <Toaster position="bottom-right" richColors />
+                </div>
+              </PageTransition>
+            </DemoProvider>
+          </CustomThemeProvider>
         </ThemeProvider>
       </body>
     </html>

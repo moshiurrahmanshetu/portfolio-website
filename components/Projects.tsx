@@ -2,80 +2,25 @@
 
 import { useState, memo, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Github, Layers } from "lucide-react";
+import { ExternalLink, Github, Layers, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { projects as projectsData } from "@/lib/projects-data";
 import { fadeInUp } from "@/lib/animations";
 
 const categories = ["All", "Laravel", "React"];
 
-const projects = [
-  {
-    id: 1,
-    title: "E-Commerce Platform",
-    description:
-      "Full-featured online store with payment integration, admin dashboard, and real-time inventory management.",
-    image: "/img/ecommerce.jpg",
-    tech: ["Laravel", "React", "MySQL", "Stripe"],
-    category: "Laravel",
-    liveUrl: "#",
-    githubUrl: "#",
-  },
-  {
-    id: 2,
-    title: "Task Management App",
-    description:
-      "Collaborative project management tool with real-time updates, drag-and-drop interface, and team analytics.",
-    image: "/img/task-management.jpg",
-    tech: ["React", "Next.js", "TypeScript", "Prisma"],
-    category: "React",
-    liveUrl: "#",
-    githubUrl: "#",
-  },
-  {
-    id: 3,
-    title: "Blog CMS",
-    description:
-      "Content management system with markdown editor, SEO optimization, and multi-user support.",
-    image: "/img/blog-site.jpg",
-    tech: ["Laravel", "Vue.js", "MySQL", "Tailwind"],
-    category: "Laravel",
-    liveUrl: "#",
-    githubUrl: "#",
-  },
-  {
-    id: 4,
-    title: "Portfolio Dashboard",
-    description:
-      "Analytics dashboard for tracking portfolio performance with charts and real-time data visualization.",
-    image: "/img/portfolio_dashboard.jpg",
-    tech: ["Next.js", "React", "D3.js", "API"],
-    category: "React",
-    liveUrl: "#",
-    githubUrl: "#",
-  },
-  {
-    id: 5,
-    title: "API Gateway Service",
-    description:
-      "RESTful API service with authentication, rate limiting, and comprehensive documentation.",
-    image: "/img/api_connection.jpg",
-    tech: ["Laravel", "PHP", "Redis", "Docker"],
-    category: "Laravel",
-    liveUrl: "#",
-    githubUrl: "#",
-  },
-  {
-    id: 6,
-    title: "Social Media App",
-    description:
-      "Modern social platform with feeds, messaging, notifications, and responsive design.",
-    image: "/img/social_media_app.jpg",
-    tech: ["React", "Next.js", "Socket.io", "MongoDB"],
-    category: "React",
-    liveUrl: "#",
-    githubUrl: "#",
-  },
-];
+const projects = projectsData.map((p) => ({
+  id: p.id,
+  slug: p.slug,
+  title: p.title,
+  description: p.shortDescription,
+  image: p.image,
+  tech: p.tech,
+  category: p.category,
+  liveUrl: p.liveUrl,
+  githubUrl: p.githubUrl,
+}));
 
 const ProjectCard = memo(function ProjectCard({
   project,
@@ -93,79 +38,96 @@ const ProjectCard = memo(function ProjectCard({
       transition={{ duration: 0.3, delay: index * 0.05 }}
       className="group relative bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/30 transition-all duration-300"
     >
-      {/* Image Container */}
-      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-muted to-muted/50">
-        {/* Lazy loaded project image */}
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
-          loading="lazy"
-          placeholder="blur"
-          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABdAAAACt3dHB0AAAABAAAAAQHdGV4dAAAAAAYAAAAAENvcmUgNS4wLTAyMzYgMjAxNy0wNzI5ADEAAAG1dHB0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAACPZhY3NTAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACmRlc2MAAAD8AAAAB1RyVFMAAAABAAAABkNoQVQgAAA8AAAACzYzNjM2LTAwMDAgVjAAAAEAGAAAACH//wAAADZgYXRlAAAAAf//AAH/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAgACADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD+/iiiigD/2Q=="
-        />
+      <Link href={`/projects/${project.slug}`} className="block">
+        {/* Image Container */}
+        <div className="relative h-48 overflow-hidden bg-gradient-to-br from-muted to-muted/50">
+          {/* Lazy loaded project image */}
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            loading="lazy"
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABdAAAACt3dHB0AAAABAAAAAQHdGV4dAAAAAAYAAAAAENvcmUgNS4wLTAyMzYgMjAxNy0wNzI5ADEAAAG1dHB0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAACPZhY3NTAAAAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACmRlc2MAAAD8AAAAB1RyVFMAAAABAAAABkNoQVQgAAA8AAAACzYzNjM2LTAwMDAgVjAAAAEAGAAAACH//wAAADZgYXRlAAAAAf//AAH/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAAgACADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD+/iiiigD/2Q=="
+          />
 
-        {/* Hover Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          {/* Hover Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-        {/* Category Badge */}
-        <div className="absolute top-4 left-4">
-          <span
-            className={`px-3 py-1 text-xs font-medium rounded-full ${
-              project.category === "Laravel"
-                ? "bg-orange-500/20 text-orange-400"
-                : "bg-blue-500/20 text-blue-400"
-            }`}
-          >
-            {project.category}
-          </span>
-        </div>
-
-        {/* Action Buttons on Hover */}
-        <div className="absolute bottom-4 left-4 right-4 flex gap-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-          <a
-            href={project.liveUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
-          >
-            <ExternalLink size={16} />
-            Live Demo
-          </a>
-          <a
-            href={project.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 px-4 py-2 bg-muted text-foreground text-sm font-medium rounded-lg hover:bg-muted/80 transition-colors"
-          >
-            <Github size={16} />
-            Code
-          </a>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="p-6">
-        <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
-          {project.title}
-        </h3>
-        <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-          {project.description}
-        </p>
-
-        {/* Tech Stack */}
-        <div className="flex flex-wrap gap-2">
-          {project.tech.map((tech) => (
+          {/* Category Badge */}
+          <div className="absolute top-4 left-4">
             <span
-              key={tech}
-              className="px-2.5 py-1 text-xs rounded-md bg-muted text-muted-foreground border border-border"
+              className={`px-3 py-1 text-xs font-medium rounded-full ${
+                project.category === "Laravel"
+                  ? "bg-orange-500/20 text-orange-400"
+                  : "bg-blue-500/20 text-blue-400"
+              }`}
             >
-              {tech}
+              {project.category}
             </span>
-          ))}
+          </div>
+
+          {/* View Details on Hover */}
+          <div className="absolute bottom-4 left-4 right-4 flex translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            <span className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg">
+              <ArrowRight size={16} />
+              View Details
+            </span>
+          </div>
         </div>
+
+        {/* Content */}
+        <div className="p-6">
+          <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+            {project.title}
+          </h3>
+          <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+            {project.description}
+          </p>
+
+          {/* Tech Stack */}
+          <div className="flex flex-wrap gap-2">
+            {project.tech.slice(0, 4).map((tech) => (
+              <span
+                key={tech}
+                className="px-2.5 py-1 text-xs rounded-md bg-muted text-muted-foreground border border-border"
+              >
+                {tech}
+              </span>
+            ))}
+            {project.tech.length > 4 && (
+              <span className="px-2.5 py-1 text-xs rounded-md bg-muted text-muted-foreground border border-border">
+                +{project.tech.length - 4}
+              </span>
+            )}
+          </div>
+        </div>
+      </Link>
+
+      {/* External Links */}
+      <div className="px-6 pb-6 pt-0 flex gap-3">
+        <a
+          href={project.liveUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
+          className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-muted text-foreground text-sm font-medium rounded-lg hover:bg-muted/80 transition-colors"
+        >
+          <ExternalLink size={16} />
+          Live Demo
+        </a>
+        <a
+          href={project.githubUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-muted text-foreground text-sm font-medium rounded-lg hover:bg-muted/80 transition-colors"
+        >
+          <Github size={16} />
+          Code
+        </a>
       </div>
     </motion.div>
   );

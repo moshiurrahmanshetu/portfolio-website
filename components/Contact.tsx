@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send, Loader2, CheckCircle } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
+import emailjs from "@emailjs/browser";
+import { toast } from "sonner";
 
 const contactInfo = [
   { icon: Mail, label: "Email", value: "hello@example.com", href: "mailto:hello@example.com" },
@@ -46,6 +48,8 @@ export default function Contact() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const formRef = useRef<HTMLFormElement>(null);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -53,15 +57,34 @@ export default function Contact() {
 
     setIsLoading(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      // EmailJS configuration - Replace with your credentials
+      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "your_service_id";
+      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "your_template_id";
+      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "your_public_key";
 
-    setIsLoading(false);
-    setIsSubmitted(true);
-    setFormData({ name: "", email: "", message: "" });
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+        },
+        publicKey
+      );
 
-    // Reset success message after 5 seconds
-    setTimeout(() => setIsSubmitted(false), 5000);
+      setIsLoading(false);
+      setIsSubmitted(true);
+      setFormData({ name: "", email: "", message: "" });
+      toast.success("Message sent successfully! I'll get back to you soon.");
+
+      // Reset success message after 5 seconds
+      setTimeout(() => setIsSubmitted(false), 5000);
+    } catch (error) {
+      setIsLoading(false);
+      toast.error("Failed to send message. Please try again or email me directly.");
+    }
   };
 
   const handleChange = (
@@ -176,7 +199,7 @@ export default function Contact() {
                   </p>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
                   {/* Name Field */}
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium mb-2">

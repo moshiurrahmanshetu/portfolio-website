@@ -2,6 +2,9 @@
 
 :root {
   --font-inter: 'Inter', system-ui, sans-serif;
+  --font-geist: 'Geist', 'Inter', system-ui, sans-serif;
+  --font-manrope: 'Manrope', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
   
   /* Light theme colors */
   --background: 0 0% 100%;
@@ -122,4 +125,34 @@ body {
     transform: translateY(-4px);
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
   }
+}
+
+/* CSS Animations for Server Components */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+  opacity: 0;
 }

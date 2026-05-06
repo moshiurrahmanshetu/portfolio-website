@@ -1,0 +1,371 @@
+---
+title: "The Complete Next.js Deployment Guide"
+excerpt: "From Vercel to self-hosted solutions. Learn the best practices for deploying Next.js applications with CI/CD, environment management, and performance optimization."
+date: "2024-01-20"
+author: "Alex Reed"
+tags: ["Next.js", "Deployment", "DevOps", "Vercel"]
+coverImage: "/img/blog/nextjs-deploy.jpg"
+---
+
+# The Complete Next.js Deployment Guide
+
+Deploying Next.js applications requires understanding your options and their trade-offs. Whether you're shipping to Vercel, AWS, or your own infrastructure, this guide has you covered.
+
+## Deployment Targets
+
+Next.js offers three rendering strategies, each with different deployment considerations:
+
+1. **Static Site Generation (SSG)** - Pre-render at build time
+2. **Server-Side Rendering (SSR)** - Render on each request
+3. **Incremental Static Regeneration (ISR)** - Best of both worlds
+
+## Option 1: Vercel (Recommended for Most)
+
+Vercel, created by the Next.js team, offers the most seamless experience:
+
+### Features
+
+- Zero-config deployments
+- Automatic HTTPS
+- Edge Network distribution
+- Preview deployments for every PR
+- Built-in analytics
+
+### Setup
+
+1. Connect your GitHub repository
+2. Configure build settings (usually automatic)
+3. Set environment variables
+4. Deploy!
+
+### Environment Variables
+
+```bash
+# .env.local (development)
+NEXT_PUBLIC_API_URL=http://localhost:3000
+DATABASE_URL=postgresql://...
+
+# Vercel Dashboard (production)
+NEXT_PUBLIC_API_URL=https://api.example.com
+```
+
+### next.config.js for Vercel
+
+```javascript
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    domains: ['example.com'],
+  },
+  env: {
+    CUSTOM_KEY: process.env.CUSTOM_KEY,
+  },
+}
+
+module.exports = nextConfig
+```
+
+## Option 2: Self-Hosted with Docker
+
+For enterprise or specific compliance requirements:
+
+### Dockerfile
+
+```dockerfile
+# Multi-stage build for optimization
+FROM node:18-alpine AS base
+
+# Install dependencies
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+
+# Build application
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
+
+# Production image
+FROM base AS runner
+WORKDIR /app
+ENV NODE_ENV production
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+ENV PORT 3000
+
+CMD ["node", "server.js"]
+```
+
+### Output Configuration
+
+Enable standalone output in `next.config.js`:
+
+```javascript
+module.exports = {
+  output: 'standalone',
+}
+```
+
+## Option 3: AWS Deployment
+
+### Using Amplify
+
+AWS Amplify provides a managed platform for full-stack apps:
+
+```yaml
+# amplify.yml
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+```
+
+### Using ECS/Fargate
+
+For containerized deployments:
+
+1. Build Docker image
+2. Push to ECR
+3. Create ECS Task Definition
+4. Configure Fargate service
+5. Set up Application Load Balancer
+
+## CI/CD Pipeline
+
+### GitHub Actions Workflow
+
+```yaml
+name: Deploy Next.js
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Lint
+        run: npm run lint
+      
+      - name: Type check
+        run: npx tsc --noEmit
+      
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+      
+      - name: Deploy to Vercel
+        uses: vercel/action-deploy@v1
+        if: github.ref == 'refs/heads/main'
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+```
+
+## Environment Management
+
+### Staging vs Production
+
+```javascript
+// lib/config.js
+const config = {
+  development: {
+    apiUrl: 'http://localhost:3001',
+    debug: true,
+  },
+  staging: {
+    apiUrl: 'https://staging-api.example.com',
+    debug: true,
+  },
+  production: {
+    apiUrl: 'https://api.example.com',
+    debug: false,
+  },
+}
+
+export default config[process.env.NODE_ENV]
+```
+
+### Runtime vs Build-time Variables
+
+```javascript
+// Build-time (available in both server/client after build)
+const buildTimeVar = process.env.NEXT_PUBLIC_API_URL
+
+// Runtime (server-only)
+const runtimeVar = process.env.DATABASE_URL
+```
+
+## Performance Optimization
+
+### Image Optimization
+
+Enable Cloudinary or similar for production:
+
+```javascript
+module.exports = {
+  images: {
+    loader: 'cloudinary',
+    path: 'https://res.cloudinary.com/your-account/',
+  },
+}
+```
+
+### Bundle Analysis
+
+Analyze your bundle size:
+
+```bash
+npm install @next/bundle-analyzer
+```
+
+```javascript
+// next.config.js
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+module.exports = withBundleAnalyzer(nextConfig)
+```
+
+### Caching Strategies
+
+```javascript
+// next.config.js
+module.exports = {
+  async headers() {
+    return [
+      {
+        source: '/:all*(svg|jpg|png)',
+        locale: false,
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ]
+  },
+}
+```
+
+## Monitoring and Logging
+
+### Error Tracking with Sentry
+
+```javascript
+// next.config.js
+const { withSentryConfig } = require('@sentry/nextjs')
+
+module.exports = withSentryConfig(nextConfig, {
+  silent: true,
+  org: 'your-org',
+  project: 'your-project',
+})
+```
+
+### Health Checks
+
+Create a simple health check endpoint:
+
+```javascript
+// pages/api/health.js
+export default function handler(req, res) {
+  res.status(200).json({ 
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+  })
+}
+```
+
+## Security Considerations
+
+### Headers Configuration
+
+```javascript
+// next.config.js
+module.exports = {
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+        ],
+      },
+    ]
+  },
+}
+```
+
+## Conclusion
+
+The best deployment strategy depends on your specific needs:
+
+- **Vercel** for simplicity and performance
+- **Docker** for control and portability
+- **AWS** for enterprise scalability
+
+Start with the simplest option that meets your requirements, and evolve as your needs grow.
+
+---
+
+*What's your deployment setup? Share your configuration tips in the comments!*

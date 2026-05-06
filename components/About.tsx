@@ -55,7 +55,7 @@ export default function About() {
               <h3 className="text-2xl font-bold mb-6">Short Bio</h3>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  Hello! I&apos;m a Full Stack Developer with a passion for building robust
+                  Hello! I&apos;m Alex Reed, a Full Stack Developer with a passion for building robust
                   and scalable web applications. I specialize in Laravel and Next.js,
                   combining backend power with modern frontend experiences.
                 </p>

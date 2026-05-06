@@ -1,259 +1,203 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
-import About from "@/components/About";
-import Experience from "@/components/Experience";
-import Skills from "@/components/Skills";
-import Projects from "@/components/Projects";
-import Contact from "@/components/Contact";
-import { fadeInUp, staggerContainer, fadeInScale } from "@/lib/animations";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useDemo } from "@/components/DemoContext";
+import DeveloperHero from "@/components/demos/DeveloperHero";
+import MinimalHero from "@/components/demos/MinimalHero";
+import CreativeHero from "@/components/demos/CreativeHero";
+import Testimonials from "@/components/Testimonials";
 
-const textVariants = {
-  hidden: { opacity: 0, y: 30 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.1, 0.25, 1],
-    },
+const featuredProjects = [
+  {
+    id: 1,
+    title: "E-Commerce Platform",
+    category: "Laravel",
+    description: "Full-featured online store with payment integration",
   },
-};
-
-const letterVariants = {
-  hidden: { opacity: 0, y: 50 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: [0.25, 0.1, 0.25, 1],
-    },
+  {
+    id: 2,
+    title: "Task Management App",
+    category: "Next.js",
+    description: "Collaborative project management tool",
   },
-};
+  {
+    id: 3,
+    title: "Blog CMS",
+    category: "Full Stack",
+    description: "Content management with markdown editor",
+  },
+];
 
 export default function Home() {
-  const scrollToNext = () => {
-    const aboutSection = document.getElementById("about");
-    if (aboutSection) {
-      const offset = 80;
-      const elementPosition = aboutSection.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - offset;
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+  const { demo } = useDemo();
+
+  const renderHero = () => {
+    switch (demo) {
+      case "minimal":
+        return <MinimalHero />;
+      case "creative":
+        return <CreativeHero />;
+      case "developer":
+      default:
+        return <DeveloperHero />;
+    }
+  };
+
+  const getProjectsSectionStyles = () => {
+    switch (demo) {
+      case "minimal":
+        return "py-24 bg-slate-50";
+      case "creative":
+        return "py-24 bg-gradient-to-b from-purple-950 to-slate-900";
+      case "developer":
+      default:
+        return "py-24 bg-slate-950";
+    }
+  };
+
+  const getCardStyles = () => {
+    switch (demo) {
+      case "minimal":
+        return "bg-white border-slate-200 hover:border-slate-400";
+      case "creative":
+        return "bg-white/5 border-white/10 hover:border-purple-500/50";
+      case "developer":
+      default:
+        return "bg-slate-900 border-slate-800 hover:border-amber-500/50";
+    }
+  };
+
+  const getTextColor = () => {
+    switch (demo) {
+      case "minimal":
+        return "text-slate-900";
+      case "creative":
+        return "text-white";
+      case "developer":
+      default:
+        return "text-slate-100";
+    }
+  };
+
+  const getMutedTextColor = () => {
+    switch (demo) {
+      case "minimal":
+        return "text-slate-500";
+      case "creative":
+        return "text-white/60";
+      case "developer":
+      default:
+        return "text-slate-400";
     }
   };
 
   return (
-    <>
-      <section
-        id="home"
-        className="relative min-h-[calc(100vh-4rem)] flex items-center overflow-hidden"
-      >
-      {/* Background Glow Effects */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
-      </div>
+    <div className="animate-fade-in">
+      {renderHero()}
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left Content - Text */}
+      {/* Featured Projects Preview */}
+      <section className={getProjectsSectionStyles()}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            animate="show"
-            className="text-center lg:text-left"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-12"
           >
-            {/* Greeting */}
-            <motion.div variants={textVariants} className="mb-4">
-              <span className="relative inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted text-sm font-medium text-muted-foreground">
-                <span className="absolute inline-flex h-3 w-3 rounded-full bg-secondary opacity-75"></span>
-                  <span className="animate-ping relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
-                Available for work
-              </span>
-             
-              
-            </motion.div>
-
-            {/* Name */}
-            <motion.h1
-              variants={textVariants}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4"
-            >
-              <span className="text-foreground">Hi, I&apos;m</span>{" "}
-              <motion.span
-                className="text-gradient inline-block"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-              >
-                Alex Reed
-              </motion.span>
-            </motion.h1>
-
-            {/* Title */}
-            <motion.div
-              variants={textVariants}
-              className="text-xl sm:text-2xl md:text-3xl font-semibold text-muted-foreground mb-6"
-            >
-              Full Stack Developer
-              <span className="text-primary"> (Laravel + Next.js)</span>
-            </motion.div>
-
-            {/* Intro */}
-            <motion.p
-              variants={textVariants}
-              className="text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed"
-            >
-              I craft robust web applications with clean code and modern technologies.
-              <br />
-              Turning ideas into scalable, user-focused digital solutions.
-            </motion.p>
-
-            {/* CTA Buttons */}
-            <motion.div
-              variants={textVariants}
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-            >
-              <motion.a
-                href="#projects"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="inline-flex items-center justify-center px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-lg shadow-primary/25"
-              >
-                View Projects
-              </motion.a>
-              <motion.a
-                href="#contact"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="inline-flex items-center justify-center px-8 py-4 border-2 border-muted-foreground/30 text-foreground font-semibold rounded-xl hover:bg-muted hover:border-muted-foreground/50 transition-all duration-300"
-              >
-                Contact Me
-              </motion.a>
-            </motion.div>
-
-            {/* Tech Stack Pills */}
-            <motion.div
-              variants={fadeInUp}
-              initial="hidden"
-              animate="show"
-              transition={{ delay: 0.8 }}
-              className="mt-8 flex flex-wrap gap-2 justify-center lg:justify-start"
-            >
-              {["Laravel", "Next.js", "React", "TypeScript", "Tailwind"].map(
-                (tech) => (
-                  <span
-                    key={tech}
-                    className="px-3 py-1 text-sm rounded-md bg-muted text-muted-foreground border border-border"
-                  >
-                    {tech}
-                  </span>
-                )
-              )}
-            </motion.div>
+            <span className={`inline-block px-4 py-2 rounded-full text-sm font-medium mb-4 ${demo === "minimal" ? "bg-slate-200 text-slate-600" : demo === "creative" ? "bg-white/10 text-white/70" : "bg-slate-800 text-slate-400"}`}>
+              Featured Work
+            </span>
+            <h2 className={`text-3xl sm:text-4xl font-bold mb-4 ${getTextColor()}`}>
+              Recent Projects
+            </h2>
           </motion.div>
 
-          {/* Right Content - Profile Image / Illustration */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-            className="relative flex justify-center lg:justify-end"
-          >
-            <div className="relative">
-              {/* Decorative Ring */}
+          <div className="grid md:grid-cols-3 gap-6">
+            {featuredProjects.map((project, index) => (
               <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0 rounded-2xl border-2 border-dashed border-primary/30 scale-110"
-              />
-
-              {/* Main Image Container */}
-              <div className="relative w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 border border-muted">
-                {/* Placeholder for Profile Image */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-50 h-50 mx-auto mb-4 rounded-full bg-muted border-4 border-primary/30 flex items-center justify-center">
-                      <span className="text-4xl rounded-full overflow-hidden"><img
-                    src="/img/img_moshiur-300.jpg"
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  /></span>
-                    </div>
-                  </div>
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
+                className={`group border rounded-xl p-6 transition-all duration-300 ${getCardStyles()}`}
+              >
+                <div className={`h-32 rounded-lg mb-4 flex items-center justify-center ${demo === "minimal" ? "bg-slate-100" : demo === "creative" ? "bg-gradient-to-br from-purple-500/20 to-pink-500/20" : "bg-gradient-to-br from-amber-500/20 to-emerald-500/20"}`}>
+                  <span className="text-4xl opacity-50">💼</span>
                 </div>
+                <span className={`text-xs font-medium uppercase tracking-wider ${demo === "minimal" ? "text-blue-600" : demo === "creative" ? "text-purple-400" : "text-amber-400"}`}>
+                  {project.category}
+                </span>
+                <h3 className={`text-xl font-semibold mt-2 mb-2 ${getTextColor()}`}>{project.title}</h3>
+                <p className={`text-sm ${getMutedTextColor()}`}>{project.description}</p>
+              </motion.div>
+            ))}
+          </div>
 
-                {/* Floating Badge - Laravel */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1, duration: 0.5 }}
-                  className="absolute -left-4 top-8 px-4 py-2 bg-background/90 backdrop-blur-sm rounded-xl border border-muted shadow-lg"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">🟠</span>
-                    <span className="text-sm font-medium">Laravel</span>
-                  </div>
-                </motion.div>
+          <div className="text-center mt-10">
+            <Link href="/projects">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-colors ${demo === "minimal" ? "bg-slate-900 text-white hover:bg-slate-800" : demo === "creative" ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white" : "bg-amber-500 text-slate-900 hover:bg-amber-400"}`}
+              >
+                View All Projects
+                <ArrowRight size={18} />
+              </motion.button>
+            </Link>
+          </div>
+        </div>
+      </section>
 
-                {/* Floating Badge - Next.js */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.2, duration: 0.5 }}
-                  className="absolute -right-4 bottom-16 px-4 py-2 bg-background/90 backdrop-blur-sm rounded-xl border border-muted shadow-lg"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">⚫</span>
-                    <span className="text-sm font-medium">Next.js</span>
-                  </div>
-                </motion.div>
+      <Testimonials />
 
-                {/* Decorative Dots */}
-                <div className="absolute -right-8 -top-8 grid grid-cols-3 gap-2">
-                  {[...Array(9)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="w-2 h-2 rounded-full bg-primary/40"
-                    />
-                  ))}
-                </div>
+      {/* CTA Section */}
+      <section className={`py-20 lg:py-32 ${demo === "minimal" ? "bg-white" : demo === "creative" ? "bg-slate-900" : "bg-slate-950"}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className={`relative rounded-2xl p-8 lg:p-12 text-center overflow-hidden ${demo === "minimal" ? "bg-slate-50 border border-slate-200" : demo === "creative" ? "bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-white/10" : "bg-slate-900 border border-slate-800"}`}
+          >
+            <div className="relative z-10 max-w-2xl mx-auto">
+              <h2 className={`text-3xl sm:text-4xl font-bold mb-4 ${getTextColor()}`}>
+                Let&apos;s Work Together
+              </h2>
+              <p className={`mb-8 ${getMutedTextColor()}`}>
+                Have a project in mind? I&apos;m always open to discussing new opportunities
+                and interesting collaborations.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/contact">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`inline-flex items-center justify-center px-8 py-4 font-semibold rounded-xl transition-all duration-300 ${demo === "minimal" ? "bg-slate-900 text-white hover:bg-slate-800" : demo === "creative" ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white" : "bg-amber-500 text-slate-900 hover:bg-amber-400"}`}
+                  >
+                    Get in Touch
+                    <ArrowRight size={18} className="ml-2" />
+                  </motion.button>
+                </Link>
+                <Link href="/about">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`inline-flex items-center justify-center px-8 py-4 font-semibold rounded-xl transition-all duration-300 border-2 ${demo === "minimal" ? "border-slate-300 text-slate-700 hover:bg-slate-100" : demo === "creative" ? "border-white/30 text-white hover:bg-white/10" : "border-slate-700 text-slate-300 hover:bg-slate-800"}`}
+                  >
+                    Learn More
+                  </motion.button>
+                </Link>
               </div>
             </div>
           </motion.div>
         </div>
-      </div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.5, duration: 0.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.button
-          onClick={scrollToNext}
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-          aria-label="Scroll to next section"
-        >
-          <span className="text-xs font-medium tracking-widest uppercase">
-            Scroll
-          </span>
-          <ChevronDown size={24} />
-        </motion.button>
-      </motion.div>
-    </section>
-
-    <About />
-    <Experience />
-    <Skills />
-    <Projects />
-    <Contact />
-  </>
+      </section>
+    </div>
   );
 }

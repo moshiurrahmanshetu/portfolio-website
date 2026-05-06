@@ -1,26 +1,27 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { fadeIn, slideInLeft, staggerContainer } from "@/lib/animations";
 
 const navItems = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Experience", href: "#experience" },
-  { name: "Skills", href: "#skills" },
-  { name: "Projects", href: "#projects" },
-  { name: "Contact", href: "#contact" },
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Projects", href: "/projects" },
+  { name: "Blog", href: "/blog" },
+  { name: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
@@ -29,42 +30,18 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
-
-      const sections = navItems.map((item) => item.href.replace("#", ""));
-      for (const section of sections.reverse()) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 100) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    const targetId = href.replace("#", "");
-    const element = document.getElementById(targetId);
-    
-    if (element) {
-      const offset = 80;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - offset;
-      
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
+  const isActive = (href: string) => {
+    if (href === "/") {
+      return pathname === "/";
     }
-    
-    setIsOpen(false);
-  }, []);
+    return pathname.startsWith(href);
+  };
 
   return (
     <motion.header
@@ -80,15 +57,15 @@ export default function Navbar() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <motion.a
-            href="#home"
-            onClick={(e) => handleNavClick(e, "#home")}
-            className="text-xl font-bold text-gradient"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Portfolio
-          </motion.a>
+          <Link href="/">
+            <motion.span
+              className="text-xl font-bold text-gradient cursor-pointer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Portfolio
+            </motion.span>
+          </Link>
 
           {/* Desktop Navigation */}
           <motion.div
@@ -98,29 +75,28 @@ export default function Navbar() {
             className="hidden md:flex items-center gap-1"
           >
             {navItems.map((item) => {
-              const isActive = activeSection === item.href.replace("#", "");
+              const active = isActive(item.href);
               return (
-                <motion.a
-                  key={item.name}
-                  variants={slideInLeft}
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item.href)}
-                  className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-lg ${
-                    isActive
-                      ? "text-foreground"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                  whileHover={{ y: -2 }}
-                >
-                  {item.name}
-                  {isActive && (
-                    <motion.span
-                      layoutId="activeNav"
-                      className="absolute inset-0 bg-muted rounded-lg -z-10"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                </motion.a>
+                <Link key={item.name} href={item.href}>
+                  <motion.span
+                    variants={slideInLeft}
+                    className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-lg cursor-pointer ${
+                      active
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                    whileHover={{ y: -2 }}
+                  >
+                    {item.name}
+                    {active && (
+                      <motion.span
+                        layoutId="activeNav"
+                        className="absolute inset-0 bg-muted rounded-lg -z-10"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                  </motion.span>
+                </Link>
               );
             })}
 
@@ -203,21 +179,20 @@ export default function Navbar() {
                 className="py-4 space-y-1"
               >
                 {navItems.map((item) => {
-                  const isActive = activeSection === item.href.replace("#", "");
+                  const active = isActive(item.href);
                   return (
-                    <motion.a
-                      key={item.name}
-                      variants={fadeIn}
-                      href={item.href}
-                      onClick={(e) => handleNavClick(e, item.href)}
-                      className={`block px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
-                        isActive
-                          ? "text-foreground bg-muted"
-                          : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                      }`}
-                    >
-                      {item.name}
-                    </motion.a>
+                    <Link key={item.name} href={item.href} onClick={() => setIsOpen(false)}>
+                      <motion.span
+                        variants={fadeIn}
+                        className={`block px-4 py-3 text-sm font-medium rounded-lg transition-colors cursor-pointer ${
+                          active
+                            ? "text-foreground bg-muted"
+                            : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                        }`}
+                      >
+                        {item.name}
+                      </motion.span>
+                    </Link>
                   );
                 })}
               </motion.div>
