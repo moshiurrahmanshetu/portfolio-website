@@ -143,7 +143,11 @@ export default function Home() {
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-colors ${demo === "minimal" ? "bg-slate-900 text-white hover:bg-slate-800" : demo === "creative" ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white" : "bg-amber-500 text-slate-900 hover:bg-amber-400"}`}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-colors"
+                style={{
+                  backgroundColor: demo === "creative" ? undefined : `hsl(var(--primary))`,
+                  color: demo === "creative" ? undefined : `hsl(var(--primary-foreground))`,
+                }}
               >
                 View All Projects
                 <ArrowRight size={18} />
@@ -176,9 +180,16 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/contact">
                   <motion.button
-                    whileHover={{ scale: 1.02 }}
+                    whileHover={{
+                      scale: 1.02,
+                      backgroundColor: demo === "creative" ? undefined : `hsl(var(--primary) / 0.9)`
+                    }}
                     whileTap={{ scale: 0.98 }}
-                    className={`inline-flex items-center justify-center px-8 py-4 font-semibold rounded-xl transition-all duration-300 ${demo === "minimal" ? "bg-slate-900 text-white hover:bg-slate-800" : demo === "creative" ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white" : "bg-amber-500 text-slate-900 hover:bg-amber-400"}`}
+                    className="inline-flex items-center justify-center px-8 py-4 font-semibold rounded-xl transition-all duration-300"
+                    style={{
+                      backgroundColor: demo === "creative" ? undefined : `hsl(var(--primary))`,
+                      color: demo === "creative" ? undefined : `hsl(var(--primary-foreground))`,
+                    }}
                   >
                     Get in Touch
                     <ArrowRight size={18} className="ml-2" />

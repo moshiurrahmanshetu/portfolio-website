@@ -71,8 +71,19 @@ function SkillBar({
       className="group"
     >
       <div className="flex items-center gap-3 mb-2">
-        <div className="p-2 rounded-lg bg-muted group-hover:bg-primary/10 transition-colors">
-          <Icon size={18} className="text-muted-foreground group-hover:text-primary transition-colors" />
+        <div
+          className="p-2 rounded-lg transition-colors"
+          style={{
+            backgroundColor: `hsl(var(--muted))`
+          }}
+        >
+          <Icon
+            size={18}
+            className="transition-colors"
+            style={{
+              color: `hsl(var(--muted-foreground))`
+            }}
+          />
         </div>
         <span className="font-medium">{skill.name}</span>
         <span className="ml-auto text-sm text-muted-foreground font-semibold">

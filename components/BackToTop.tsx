@@ -45,7 +45,12 @@ export default function BackToTop() {
           onClick={scrollToTop}
           whileHover={{ scale: 1.1, y: -2 }}
           whileTap={{ scale: 0.95 }}
-          className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow"
+          className="fixed bottom-6 right-6 z-50 p-3 rounded-full transition-shadow"
+          style={{
+            backgroundColor: `hsl(var(--primary))`,
+            color: `hsl(var(--primary-foreground))`,
+            boxShadow: `0 10px 15px -3px hsl(var(--primary) / 0.25), 0 4px 6px -2px hsl(var(--primary) / 0.25)`
+          }}
           aria-label="Back to top"
         >
           <ArrowUp size={24} />

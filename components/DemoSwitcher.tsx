@@ -110,10 +110,12 @@ export default function DemoSwitcher() {
                       }}
                       className={cn(
                         "w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all",
-                        isActive
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-primary/30 hover:bg-muted/30"
+                        !isActive && "border-border hover:border-primary/30 hover:bg-muted/30"
                       )}
+                      style={isActive ? {
+                        borderColor: `hsl(var(--primary))`,
+                        backgroundColor: `hsl(var(--primary) / 0.05)`
+                      } : undefined}
                     >
                       {/* Preview */}
                       <div
@@ -144,9 +146,15 @@ export default function DemoSwitcher() {
 
                       {/* Checkmark */}
                       {isActive && (
-                        <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shrink-0">
+                        <div
+                          className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
+                          style={{
+                            backgroundColor: `hsl(var(--primary))`,
+                            color: `hsl(var(--primary-foreground))`
+                          }}
+                        >
                           <svg
-                            className="w-4 h-4 text-primary-foreground"
+                            className="w-4 h-4"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"

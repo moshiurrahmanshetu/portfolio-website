@@ -80,9 +80,13 @@ export default function About() {
                     (trait) => (
                       <span
                         key={trait}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-full bg-muted text-muted-foreground"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-full"
+                        style={{
+                          backgroundColor: `hsl(var(--muted))`,
+                          color: `hsl(var(--muted-foreground))`
+                        }}
                       >
-                        <CheckCircle size={14} className="text-secondary" />
+                        <CheckCircle size={14} style={{ color: `hsl(var(--secondary))` }} />
                         {trait}
                       </span>
                     )
@@ -111,8 +115,11 @@ export default function About() {
                   const Icon = item.icon;
                   return (
                     <div key={item.label} className="flex items-start gap-4">
-                      <div className="p-3 rounded-xl bg-muted">
-                        <Icon size={20} className="text-primary" />
+                      <div
+                        className="p-3 rounded-xl"
+                        style={{ backgroundColor: `hsl(var(--muted))` }}
+                      >
+                        <Icon size={20} style={{ color: `hsl(var(--primary))` }} />
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">{item.label}</p>
@@ -135,8 +142,11 @@ export default function About() {
                     whileHover={{ y: -5, transition: { duration: 0.2 } }}
                     className="bg-card border border-border rounded-2xl p-6 text-center hover:border-primary/30 transition-colors"
                   >
-                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 mb-4">
-                      <Icon size={24} className="text-primary" />
+                    <div
+                      className="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4"
+                      style={{ backgroundColor: `hsl(var(--primary) / 0.1)` }}
+                    >
+                      <Icon size={24} style={{ color: `hsl(var(--primary))` }} />
                     </div>
                     <div className="text-3xl font-bold text-gradient mb-1">
                       {stat.value}

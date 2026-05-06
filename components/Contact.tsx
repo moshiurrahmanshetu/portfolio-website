@@ -146,12 +146,18 @@ export default function Contact() {
                     whileHover={{ x: 5 }}
                     className="flex items-start gap-4 group"
                   >
-                    <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                      <Icon size={22} className="text-primary" />
+                    <div
+                      className="p-3 rounded-xl transition-colors"
+                      style={{ backgroundColor: `hsl(var(--primary) / 0.1)` }}
+                    >
+                      <Icon size={22} style={{ color: `hsl(var(--primary))` }} />
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">{item.label}</p>
-                      <p className="font-medium group-hover:text-primary transition-colors">
+                      <p
+                        className="font-medium transition-colors"
+                        style={{ color: `hsl(var(--foreground))` }}
+                      >
                         {item.value}
                       </p>
                     </div>
@@ -269,7 +275,11 @@ export default function Contact() {
                     disabled={isLoading}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full flex items-center justify-center gap-2 px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full flex items-center justify-center gap-2 px-8 py-4 font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{
+                      backgroundColor: `hsl(var(--primary))`,
+                      color: `hsl(var(--primary-foreground))`
+                    }}
                   >
                     {isLoading ? (
                       <>

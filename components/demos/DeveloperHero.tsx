@@ -80,7 +80,11 @@ export default function DeveloperHero() {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="inline-flex items-center justify-center px-6 py-3 bg-amber-500 text-slate-900 font-semibold rounded-lg hover:bg-amber-400 transition-colors font-mono"
+                  className="inline-flex items-center justify-center px-6 py-3 font-semibold rounded-lg transition-colors font-mono"
+                  style={{
+                    backgroundColor: `hsl(var(--primary))`,
+                    color: `hsl(var(--primary-foreground))`
+                  }}
                 >
                   <span className="mr-2">$</span> ls projects/
                 </motion.button>
@@ -89,10 +93,13 @@ export default function DeveloperHero() {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="inline-flex items-center justify-center px-6 py-3 border border-slate-700 text-slate-300 font-semibold rounded-lg hover:bg-slate-800 transition-colors font-mono"
+                  className="inline-flex items-center justify-center px-6 py-3 border font-semibold rounded-lg transition-colors font-mono"
+                  style={{
+                    borderColor: `hsl(var(--border))`,
+                    color: `hsl(var(--foreground))`
+                  }}
                 >
                   npm run contact
-                  <ArrowRight size={16} className="ml-2" />
                 </motion.button>
               </Link>
             </div>

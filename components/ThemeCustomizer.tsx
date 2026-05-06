@@ -32,10 +32,16 @@ export default function ThemeCustomizer() {
         onClick={() => setIsOpen(true)}
         className={cn(
           "fixed bottom-24 right-6 z-50 p-3 rounded-full",
-          "bg-primary text-primary-foreground shadow-lg shadow-primary/25",
-          "hover:scale-110 hover:shadow-xl hover:shadow-primary/30",
-          "transition-all duration-300"
+          "hover:scale-110 transition-all duration-300"
         )}
+        style={{
+          backgroundColor: `hsl(var(--primary))`,
+          color: `hsl(var(--primary-foreground))`,
+          boxShadow: `0 10px 15px -3px hsl(var(--primary) / 0.25), 0 4px 6px -2px hsl(var(--primary) / 0.25)`
+        }}
+        whileHover={{
+          boxShadow: `0 20px 25px -5px hsl(var(--primary) / 0.3), 0 10px 10px -5px hsl(var(--primary) / 0.3)`
+        }}
         aria-label="Open theme settings"
       >
         <Settings size={24} className="animate-spin-slow" style={{ animationDuration: '8s' }} />

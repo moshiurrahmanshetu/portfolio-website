@@ -44,7 +44,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           {/* Project Header */}
           <div className="mb-12">
             <div className="flex flex-wrap items-center gap-3 mb-4">
-              <span className="px-3 py-1 text-sm font-medium rounded-full bg-primary/10 text-primary">
+              <span
+                className="px-3 py-1 text-sm font-medium rounded-full"
+                style={{
+                  backgroundColor: `hsl(var(--primary) / 0.1)`,
+                  color: `hsl(var(--primary))`
+                }}
+              >
                 {project.category}
               </span>
               <span className="text-sm text-muted-foreground">{project.year}</span>
@@ -63,7 +69,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-lg shadow-primary/25"
+              className="inline-flex items-center gap-2 px-6 py-3 font-semibold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+              style={{
+                backgroundColor: `hsl(var(--primary))`,
+                color: `hsl(var(--primary-foreground))`,
+                boxShadow: `0 10px 15px -3px hsl(var(--primary) / 0.25), 0 4px 6px -2px hsl(var(--primary) / 0.25)`
+              }}
             >
               <ExternalLink size={18} />
               Live Preview
@@ -72,7 +83,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-border text-foreground font-semibold rounded-xl hover:bg-muted hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+              className="inline-flex items-center gap-2 px-6 py-3 border-2 border-border font-semibold rounded-xl hover:bg-muted hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+              style={{ color: `hsl(var(--foreground))` }}
             >
               <Github size={18} />
               View Code
@@ -81,7 +93,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
           {/* Main Image */}
           <div className="relative aspect-video rounded-2xl overflow-hidden bg-muted mb-8">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+            <div
+              className="absolute inset-0 flex items-center justify-center"
+              style={{
+                background: `linear-gradient(to bottom right, hsl(var(--primary) / 0.2), hsl(var(--secondary) / 0.2))`
+              }}
+            >
               <span className="text-6xl opacity-50">💼</span>
             </div>
           </div>

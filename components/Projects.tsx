@@ -71,7 +71,13 @@ const ProjectCard = memo(function ProjectCard({
 
           {/* View Details on Hover */}
           <div className="absolute bottom-4 left-4 right-4 flex translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-            <span className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg">
+            <span
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-lg"
+              style={{
+                backgroundColor: `hsl(var(--primary))`,
+                color: `hsl(var(--primary-foreground))`
+              }}
+            >
               <ArrowRight size={16} />
               View Details
             </span>
@@ -80,7 +86,10 @@ const ProjectCard = memo(function ProjectCard({
 
         {/* Content */}
         <div className="p-6">
-          <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+          <h3
+            className="text-xl font-bold mb-2 transition-colors"
+            style={{ color: `hsl(var(--foreground))` }}
+          >
             {project.title}
           </h3>
           <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
@@ -185,14 +194,16 @@ export default function Projects() {
               whileTap={{ scale: 0.98 }}
               className={`relative px-6 py-2.5 text-sm font-medium rounded-full transition-all duration-300 ${
                 activeFilter === category
-                  ? "text-primary-foreground"
+                  ? ""
                   : "text-muted-foreground hover:text-foreground bg-muted hover:bg-muted/80"
               }`}
+              style={activeFilter === category ? { color: `hsl(var(--primary-foreground))` } : undefined}
             >
               {activeFilter === category && (
                 <motion.span
                   layoutId="activeFilter"
-                  className="absolute inset-0 bg-primary rounded-full"
+                  className="absolute inset-0 rounded-full"
+                  style={{ backgroundColor: `hsl(var(--primary))` }}
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}

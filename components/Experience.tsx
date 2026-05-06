@@ -138,7 +138,10 @@ function ExperienceDrawer({ isOpen, onClose }: DrawerProps) {
               <div className="flex-1 overflow-y-auto p-6 space-y-8">
                 {/* Experience Section */}
                 <div>
-                  <h3 className="text-sm font-semibold text-[#f59e0b] uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <h3
+                    className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2"
+                    style={{ color: `hsl(var(--primary))` }}
+                  >
                     <Briefcase size={16} />
                     Work Experience
                   </h3>
@@ -148,11 +151,15 @@ function ExperienceDrawer({ isOpen, onClose }: DrawerProps) {
                       .map((item) => (
                         <div
                           key={item.id}
-                          className="bg-muted/50 rounded-xl p-5 border border-border/50 hover:border-[#f59e0b]/30 transition-colors"
+                          className="bg-muted/50 rounded-xl p-5 border border-border/50 transition-colors"
+                          style={{ borderColor: `hsl(var(--border) / 0.5)` }}
                         >
                           <div className="flex items-start gap-3 mb-3">
-                            <div className="p-2 rounded-lg bg-[#f59e0b]/10">
-                              <item.icon size={18} className="text-[#f59e0b]" />
+                            <div
+                              className="p-2 rounded-lg"
+                              style={{ backgroundColor: `hsl(var(--primary) / 0.1)` }}
+                            >
+                              <item.icon size={18} style={{ color: `hsl(var(--primary))` }} />
                             </div>
                             <div className="flex-1">
                               <h4 className="font-semibold text-foreground">{item.title}</h4>
@@ -194,7 +201,10 @@ function ExperienceDrawer({ isOpen, onClose }: DrawerProps) {
 
                 {/* Education Section */}
                 <div>
-                  <h3 className="text-sm font-semibold text-[#f59e0b] uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <h3
+                    className="text-sm font-semibold uppercase tracking-wider mb-4 flex items-center gap-2"
+                    style={{ color: `hsl(var(--primary))` }}
+                  >
                     <GraduationCap size={16} />
                     Education
                   </h3>
@@ -203,11 +213,15 @@ function ExperienceDrawer({ isOpen, onClose }: DrawerProps) {
                     .map((item) => (
                       <div
                         key={item.id}
-                        className="bg-muted/50 rounded-xl p-5 border border-border/50 hover:border-[#f59e0b]/30 transition-colors"
+                        className="bg-muted/50 rounded-xl p-5 border border-border/50 transition-colors"
+                        style={{ borderColor: `hsl(var(--border) / 0.5)` }}
                       >
                         <div className="flex items-start gap-3 mb-3">
-                          <div className="p-2 rounded-lg bg-[#f59e0b]/10">
-                            <item.icon size={18} className="text-[#f59e0b]" />
+                          <div
+                            className="p-2 rounded-lg"
+                            style={{ backgroundColor: `hsl(var(--primary) / 0.1)` }}
+                          >
+                            <item.icon size={18} style={{ color: `hsl(var(--primary))` }} />
                           </div>
                           <div className="flex-1">
                             <h4 className="font-semibold text-foreground">{item.title}</h4>
@@ -249,7 +263,11 @@ function ExperienceDrawer({ isOpen, onClose }: DrawerProps) {
                 {/* Download CV Button */}
                 <a
                   href="#"
-                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#f59e0b] text-[#0f172a] font-semibold hover:bg-[#f59e0b]/90 transition-colors"
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold transition-colors"
+                  style={{
+                    backgroundColor: `hsl(var(--primary))`,
+                    color: `hsl(var(--primary-foreground))`
+                  }}
                 >
                   <ExternalLink size={18} />
                   Download Full CV
@@ -298,7 +316,12 @@ export default function Experience() {
             className="relative max-w-3xl mx-auto"
           >
             {/* Center Line */}
-            <div className="absolute left-4 sm:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#f59e0b]/50 via-border to-[#f59e0b]/30 sm:-translate-x-1/2" />
+            <div
+              className="absolute left-4 sm:left-1/2 top-0 bottom-0 w-px sm:-translate-x-1/2"
+              style={{
+                background: `linear-gradient(to bottom, hsl(var(--primary) / 0.5), hsl(var(--border)), hsl(var(--primary) / 0.3))`
+              }}
+            />
 
             {/* Timeline Items */}
             <div className="space-y-8">
@@ -311,7 +334,10 @@ export default function Experience() {
                   }`}
                 >
                   {/* Timeline Dot */}
-                  <div className="absolute left-4 sm:left-1/2 w-3 h-3 rounded-full bg-[#f59e0b] border-2 border-background sm:-translate-x-1/2 z-10 mt-6" />
+                  <div
+                    className="absolute left-4 sm:left-1/2 w-3 h-3 rounded-full border-2 border-background sm:-translate-x-1/2 z-10 mt-6"
+                    style={{ backgroundColor: `hsl(var(--primary))` }}
+                  />
 
                   {/* Content Card */}
                   <div
@@ -321,15 +347,20 @@ export default function Experience() {
                   >
                     <motion.div
                       whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                      className="bg-card border border-border rounded-xl p-5 hover:border-[#f59e0b]/30 transition-colors group"
+                      className="bg-card border border-border rounded-xl p-5 transition-colors group"
                     >
                       <div
                         className={`flex items-center gap-3 mb-3 ${
                           index % 2 === 0 ? "sm:flex-row-reverse" : ""
                         }`}
                       >
-                        <div className="p-2 rounded-lg bg-[#f59e0b]/10 group-hover:bg-[#f59e0b]/20 transition-colors">
-                          <item.icon size={18} className="text-[#f59e0b]" />
+                        <div
+                          className="p-2 rounded-lg transition-colors"
+                          style={{
+                            backgroundColor: `hsl(var(--primary) / 0.1)`
+                          }}
+                        >
+                          <item.icon size={18} style={{ color: `hsl(var(--primary))` }} />
                         </div>
                         <div className={index % 2 === 0 ? "sm:text-right" : ""}>
                           <h3 className="font-semibold text-foreground">{item.title}</h3>
@@ -361,7 +392,11 @@ export default function Experience() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setIsDrawerOpen(true)}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#f59e0b] text-[#0f172a] font-semibold hover:bg-[#f59e0b]/90 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-colors"
+                style={{
+                  backgroundColor: `hsl(var(--primary))`,
+                  color: `hsl(var(--primary-foreground))`
+                }}
               >
                 View Full Details
                 <ChevronRight size={18} />
