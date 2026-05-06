@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import Projects from "@/components/Projects";
-import Skills from "@/components/Skills";
 
 export default function ProjectsPage() {
   return (
@@ -36,7 +35,6 @@ export default function ProjectsPage() {
       </section>
 
       <Projects />
-      <Skills />
     </motion.div>
   );
 }

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import About from "@/components/About";
 import Experience from "@/components/Experience";
+import Skills from "@/components/Skills";
 import { fadeInUp } from "@/lib/animations";
 
 export default function AboutPage() {
@@ -38,6 +39,7 @@ export default function AboutPage() {
 
       <About />
       <Experience />
+      <Skills />
     </motion.div>
   );
 }

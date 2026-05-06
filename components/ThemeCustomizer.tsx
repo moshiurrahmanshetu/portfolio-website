@@ -31,7 +31,7 @@ export default function ThemeCustomizer() {
         transition={{ delay: 1, duration: 0.3 }}
         onClick={() => setIsOpen(true)}
         className={cn(
-          "fixed bottom-6 right-6 z-50 p-3 rounded-full",
+          "fixed bottom-24 right-6 z-50 p-3 rounded-full",
           "bg-primary text-primary-foreground shadow-lg shadow-primary/25",
           "hover:scale-110 hover:shadow-xl hover:shadow-primary/30",
           "transition-all duration-300"

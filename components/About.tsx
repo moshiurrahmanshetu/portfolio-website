@@ -5,9 +5,9 @@ import { User, Mail, MapPin, Calendar, Briefcase, Code2, Users, CheckCircle } fr
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 const personalInfo = [
-  { icon: User, label: "Name", value: "[Your Name]" },
-  { icon: Mail, label: "Email", value: "hello@example.com" },
-  { icon: MapPin, label: "Location", value: "[Your City, Country]" },
+  { icon: User, label: "Name", value: "Alex Reed" },
+  { icon: Mail, label: "Email", value: "info@example.com" },
+  { icon: MapPin, label: "Location", value: " London, UK" },
   { icon: Calendar, label: "Experience", value: "5+ Years" },
 ];
 

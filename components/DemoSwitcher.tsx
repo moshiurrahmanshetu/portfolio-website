@@ -44,7 +44,7 @@ export default function DemoSwitcher() {
         transition={{ delay: 1.5, duration: 0.3 }}
         onClick={() => setIsOpen(true)}
         className={cn(
-          "fixed bottom-24 right-6 z-40 p-3 rounded-full",
+          "fixed bottom-44 right-6 z-40 p-3 rounded-full",
           "bg-card border border-border shadow-lg",
           "hover:scale-110 hover:shadow-xl",
           "transition-all duration-300"
